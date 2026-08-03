@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WUTV - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0D1B2A; --surface-color: #1B263B; --accent-primary: #415A77; --accent-secondary: #778DA9; --text-color: #E0E1DD; --cursor-color: #E0E1DD; }
+        [data-theme="vintage"] { --bg-color: #2b2013; --surface-color: #3b2d1d; --accent-primary: #8c5a2b; --accent-secondary: #d19a5e; --text-color: #fcebd7; --cursor-color: #d19a5e; }
+        [data-theme="crt"] { --bg-color: #050505; --surface-color: #111111; --accent-primary: #00FFCC; --accent-secondary: #39FF14; --text-color: #39FF14; --cursor-color: #39FF14; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease, color 0.8s ease; cursor: none; overflow-x: hidden; }
+        h1, h2, h3, .retro-text { font-family: 'VT323', monospace; text-transform: uppercase; }
+        .film-grain { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        [data-theme="crt"] .film-grain { opacity: 0.1; background-size: 100% 4px; background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); }
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 30px; height: 30px; border: 2px solid var(--cursor-color); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-radius 0.2s, background-color 0.2s; z-index: 999999; mix-blend-mode: difference; }
+        .custom-cursor::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background-color: var(--cursor-color); border-radius: 50%; transform: translate(-50%, -50%); }
+        .hover-active .custom-cursor { width: 60px; height: 60px; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); }
+        .liquid-glass { background: rgba(13, 27, 42, 0.4); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(255, 255, 255, 0.05); }
+        [data-theme="vintage"] .liquid-glass { background: rgba(43, 32, 19, 0.4); } [data-theme="crt"] .liquid-glass { background: rgba(5, 5, 5, 0.5); border-color: rgba(57, 255, 20, 0.2); }
+        .surface-box { background: rgba(27, 38, 59, 0.4); backdrop-filter: blur(16px) saturate(150%); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .surface-box:hover { transform: translateY(-10px) scale(1.02); }
+        .btn-contrast { background: linear-gradient(135deg, #f8f9fa, #ced4da); color: #0D1B2A; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); transition: transform 0.3s, opacity 0.3s; }
+        .btn-contrast:hover { transform: scale(1.05); }
+        [data-theme="vintage"] .btn-contrast { background: linear-gradient(135deg, #d19a5e, #a87b4b); color: #2b2013; } [data-theme="crt"] .btn-contrast { background: #39FF14; color: #050505; }
+        .btn-primary { background-color: rgba(65, 90, 119, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); color: var(--text-color); transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: var(--accent-secondary); color: var(--bg-color); }
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .social-btn { transition: transform 0.3s ease, filter 0.3s ease; color: white !important; }
+        .social-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="film-grain"></div>
+    <div class="custom-cursor" id="cursor"></div>
+
+    <div id="rec-overlay" class="fixed inset-0 pointer-events-none z-[9990] opacity-0 transition-opacity duration-500 hidden">
+        <div class="absolute inset-4 md:inset-8 border border-white/20"></div>
+        <div class="absolute inset-8 md:inset-12 border-2 border-white/40"></div>
+        <div class="absolute top-12 md:top-16 right-12 md:right-16 flex items-center gap-3">
+            <span class="w-3 h-3 md:w-4 md:h-4 rounded-full bg-red-600 animate-pulse shadow-[0_0_15px_rgba(220,38,38,1)]"></span>
+            <span class="text-red-500 font-bold tracking-widest text-xl md:text-2xl retro-text drop-shadow-md">REC</span>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between gap-4 w-[95%] max-w-7xl px-3 py-2 md:px-6 md:py-3 rounded-full liquid-glass transition-all duration-500 relative">
+        <div class="flex items-center gap-2 md:gap-4">
+            <a href="index.html" class="interactive group relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-white/20 shadow-lg bg-black flex-shrink-0">
+                <img src="logo.png" alt="WUTV Home" class="w-full h-full object-cover">
+            </a>
+        </div>
+        <div class="hidden lg:flex items-center gap-6 text-sm font-semibold tracking-wide text-gray-300">
+            <a href="#our-work" class="interactive hover:text-white transition-colors">Work</a>
+            <a href="#upcoming-events" class="interactive hover:text-white transition-colors">Upcoming Events</a>
+            <a href="#connect" class="interactive hover:text-white transition-colors">Contact</a>
+            <a href="calendar.html" class="interactive hover:text-white transition-colors">Calendar</a>
+            <a href="about.html" class="interactive hover:text-white transition-colors">About Us</a>
+        </div>
+        <div class="flex items-center gap-2 md:gap-3 relative">
+            <div class="hidden md:flex items-center gap-1 bg-black/20 p-1 rounded-full border border-white/5 relative">
+                <button onclick="setTheme('default')" class="interactive group px-2.5 py-1.5 rounded-full hover:bg-white/10"><span class="w-2 h-2 inline-block rounded-full bg-blue-400"></span></button>
+                <button onclick="setTheme('vintage')" class="interactive group px-2.5 py-1.5 rounded-full hover:bg-white/10"><span class="w-2 h-2 inline-block rounded-full bg-orange-400"></span></button>
+                <button onclick="setTheme('crt')" class="interactive group px-2.5 py-1.5 rounded-full hover:bg-white/10"><span class="w-2 h-2 inline-block rounded-full bg-green-400"></span></button>
+                <div class="w-px h-5 bg-white/20 mx-1"></div>
+                <button onclick="toggleRecMode()" class="interactive group px-3 py-1.5 rounded-full hover:bg-white/10 flex items-center gap-2 relative">
+                    <span id="rec-indicator" class="w-2 h-2 rounded-full bg-gray-500"></span>
+                    <span class="text-xs font-bold tracking-widest uppercase retro-text text-gray-300 mt-0.5">LENS</span>
+                </button>
+
+                <!-- FIXED ARROW: Pointing up from the bottom -->
+                <div class="absolute -bottom-16 right-4 hidden md:flex flex-col items-center animate-bounce text-white/50 pointer-events-none">
+                    <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                    </svg>
+                    <span class="text-xs font-bold uppercase tracking-widest retro-text mt-1 text-center">Try<br>Lenses</span>
+                </div>
+            </div>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQUVx0UCqJigeO_lTWXGYN1PYqugCRmQgx-SiOJeF30XFW9A/viewform?usp=dialog" target="_blank" class="btn-contrast px-4 py-2 md:px-5 md:py-2 rounded-full font-bold uppercase tracking-wider text-xs md:text-sm interactive whitespace-nowrap">Apply</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="min-h-[60vh] md:min-h-[75vh] flex flex-col items-center justify-center text-center px-4 reveal relative pt-24 md:pt-20">
+        <h1 class="text-5xl md:text-8xl font-bold mb-4 tracking-tighter" style="color: var(--accent-primary); text-shadow: 0px 4px 20px rgba(0,0,0,0.5);">ON AIR.</h1>
+        <p class="text-lg md:text-2xl max-w-2xl font-light opacity-90">WUTV. Creating, broadcasting, and amplifying student voices through the lens.</p>
+    </section>
+
+    <!-- SECTION 1: OUR WORK -->
+    <section id="our-work" class="py-12 px-6 md:px-8 max-w-7xl mx-auto reveal">
+        <h2 class="text-4xl md:text-5xl font-bold mb-8 md:mb-12 text-center border-b-2 pb-4" style="border-color: rgba(255,255,255,0.1); color: var(--text-color)">Our Work</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            <!-- Tiny Desk Concert -->
+            <div class="surface-box rounded-xl overflow-hidden interactive group flex flex-col bg-[#111827] border-none shadow-2xl cursor-pointer" onclick="toggleCard(this)">
+                <div class="h-48 md:h-56 w-full bg-white relative flex items-center justify-center p-6 border-b-4 border-black">
+                    <img src="tinydesk.png" alt="Tiny Desk Concerts" class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105">
+                </div>
+                <div class="p-6 md:p-8 text-center flex-grow flex flex-col items-center justify-center bg-[#131f33]">
+                    <h3 class="text-2xl font-bold font-['VT323'] tracking-widest text-[#E0E1DD] drop-shadow-md">TINY DESK CONCERT</h3>
+                    <div class="expand-content max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+                        <p class="text-sm text-gray-300">Experience intimate live performances from talented artists in our unique campus studio setting.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speaker Events -->
+            <div class="surface-box rounded-xl overflow-hidden interactive group flex flex-col cursor-pointer" onclick="toggleCard(this)">
+                <div class="h-48 md:h-56 w-full bg-black relative flex items-center justify-center">
+                    <div class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-100 transition-opacity duration-500" style="background-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3');"></div>
+                    <div class="relative z-10 retro-text text-2xl tracking-widest text-white drop-shadow-md">[ REC ]</div>
+                </div>
+                <div class="p-6 text-center border-t border-white/10 flex-grow flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold">Speaker Events</h3>
+                    <div class="expand-content max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+                        <p class="text-sm text-gray-300">Engaging talks and discussions featuring industry professionals, thought leaders, and creative minds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 48hr Film-a-thon -->
+            <div class="surface-box rounded-xl overflow-hidden interactive group flex flex-col cursor-pointer" onclick="toggleCard(this)">
+                <div class="h-48 md:h-56 w-full bg-black relative flex items-center justify-center">
+                    <div class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-100 transition-opacity duration-500" style="background-image: url('https://images.unsplash.com/photo-1603565985054-0ebc5740fcde?ixlib=rb-4.0.3');"></div>
+                    <div class="relative z-10 retro-text text-2xl tracking-widest text-white drop-shadow-md">[ REC ]</div>
+                </div>
+                <div class="p-6 text-center border-t border-white/10 flex-grow flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold">48hr Film-a-thon</h3>
+                    <div class="expand-content max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+                        <p class="text-sm text-gray-300">A high-stakes, caffeine-fueled weekend where students write, shoot, and edit a short film in just 48 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: UPCOMING EVENTS -->
+    <section id="upcoming-events" class="py-12 px-6 md:px-8 max-w-6xl mx-auto reveal">
+        <div class="flex flex-col md:flex-row items-center justify-between mb-8 border-b-2 pb-4 gap-4" style="border-color: rgba(255,255,255,0.1);">
+            <h2 class="text-3xl md:text-5xl font-bold text-center md:text-left" style="color: var(--text-color)">Upcoming Events</h2>
+            <a href="calendar.html" class="btn-contrast px-4 py-2 rounded-full font-bold uppercase tracking-wider text-xs interactive w-full md:w-auto text-center">View Full Calendar</a>
+        </div>
+        <div class="surface-box rounded-2xl overflow-hidden p-2">
+            <iframe src="https://calendar.google.com/calendar/embed?src=ddbd1becfd788a44828e9e0cd80d74e7157369dad4c80b54bc65a0a67163ea90%40group.calendar.google.com&ctz=America%2FChicago&mode=AGENDA" style="border: 0" width="100%" height="400" frameborder="0" scrolling="no" class="rounded-xl filter invert hue-rotate-180 opacity-90"></iframe>
+        </div>
+    </section>
+
+    <!-- SECTION 3: CONTACT SECTION -->
+    <section id="connect" class="py-20 px-6 md:px-8 max-w-5xl mx-auto text-center reveal">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: var(--text-color)">Let's Connect</h2>
+        <p class="text-lg md:text-xl mb-12 opacity-80 max-w-2xl mx-auto">Got a story to tell? Want to join the crew? Reach out to us or find us on campus below.</p>
+        <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+            <!-- Updated Links and Colors -->
+            <a href="mailto:wutv23@gmail.com" class="btn-contrast px-6 py-3 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-sm interactive w-full sm:w-auto">Email Us</a>
+            
+            <a href="https://www.instagram.com/wutv_22/" target="_blank" class="social-btn px-6 py-3 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-sm interactive w-full sm:w-auto shadow-lg" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">Instagram</a>
+            
+            <a href="https://www.linkedin.com/company/wutv26" target="_blank" class="social-btn px-6 py-3 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-sm interactive w-full sm:w-auto shadow-lg" style="background-color: #0A66C2;">LinkedIn</a>
+            
+            <a href="https://www.tiktok.com/@washutv" target="_blank" class="social-btn px-6 py-3 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-sm interactive w-full sm:w-auto shadow-lg flex items-center justify-center gap-2" style="background-color: #000000; border: 1px solid #333;">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#25F4EE] via-white to-[#FE2C55]">TikTok</span>
+            </a>
+            
+            <a href="https://wustl.presence.io/organization/washu-television-network" target="_blank" class="social-btn px-6 py-3 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-sm interactive w-full sm:w-auto shadow-lg" style="background-color: #A51417;">WUGO</a>
+        </div>
+    </section>
+
+    <!-- SHARED JAVASCRIPT FOR PERSISTENCE -->
+    <script>
+        function setTheme(theme, skipSave = false) {
+            if (theme === 'default') document.documentElement.removeAttribute('data-theme');
+            else document.documentElement.setAttribute('data-theme', theme);
+            if (!skipSave) localStorage.setItem('wutv_theme', theme);
+        }
+
+        let isRecMode = false;
+        function toggleRecMode(forceState = null) {
+            isRecMode = forceState !== null ? forceState : !isRecMode;
+            if (forceState === null) localStorage.setItem('wutv_recmode', isRecMode);
+            const overlay = document.getElementById('rec-overlay');
+            const indicator = document.getElementById('rec-indicator');
+            if (isRecMode) {
+                overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                if (indicator) { indicator.classList.remove('bg-gray-500'); indicator.classList.add('bg-red-500', 'shadow-[0_0_10px_rgba(239,68,68,1)]'); }
+            } else {
+                overlay.classList.add('opacity-0');
+                if (indicator) { indicator.classList.remove('bg-red-500', 'shadow-[0_0_10px_rgba(239,68,68,1)]'); indicator.classList.add('bg-gray-500'); }
+                setTimeout(() => overlay.classList.add('hidden'), 500);
+            }
+        }
+
+        function toggleCard(card) {
+            const content = card.querySelector('.expand-content');
+            content.classList.toggle('max-h-40');
+            content.classList.toggle('opacity-100');
+            content.classList.toggle('mt-4');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('wutv_theme') || 'default'; setTheme(savedTheme, true);
+            const savedRecMode = localStorage.getItem('wutv_recmode') === 'true'; if (savedRecMode) toggleRecMode(true);
+        });
+
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('.interactive, a, button, .cursor-pointer').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+        });
+
+        const scrollObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => { if(entry.isIntersecting) { entry.target.classList.add('active'); obs.unobserve(entry.target); }});
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => scrollObserver.observe(el));
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WUTV - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0D1B2A; --surface-color: #1B263B; --text-color: #E0E1DD; --cursor-color: #E0E1DD; }
+        [data-theme="vintage"] { --bg-color: #2b2013; --surface-color: #3b2d1d; --text-color: #fcebd7; --cursor-color: #d19a5e; }
+        [data-theme="crt"] { --bg-color: #050505; --surface-color: #111111; --text-color: #39FF14; --cursor-color: #39FF14; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease, color 0.8s ease; cursor: none; }
+        h1, h2, h3, .retro-text { font-family: 'VT323', monospace; text-transform: uppercase; }
+        .film-grain { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        [data-theme="crt"] .film-grain { opacity: 0.1; }
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 30px; height: 30px; border: 2px solid var(--cursor-color); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-radius 0.2s, background-color 0.2s; z-index: 999999; mix-blend-mode: difference; }
+        .custom-cursor::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background-color: var(--cursor-color); border-radius: 50%; transform: translate(-50%, -50%); }
+        .hover-active .custom-cursor { width: 60px; height: 60px; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); }
+        .surface-box { background: rgba(27, 38, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body class="antialiased pb-20">
+    <div class="film-grain"></div>
+    <div class="custom-cursor" id="cursor"></div>
+
+    <!-- HEADER / BACK BUTTON -->
+    <div class="max-w-7xl mx-auto px-6 md:px-8 pt-8 md:pt-12 flex justify-between items-center mb-12">
+        <a href="index.html" class="interactive flex items-center gap-2 text-white/70 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span class="font-bold uppercase tracking-wider text-xs md:text-sm">Back to Home</span>
+        </a>
+    </div>
+
+    <section class="px-6 md:px-8 max-w-7xl mx-auto">
+        <!-- Intro -->
+        <div class="text-center mb-16 max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 retro-text" style="color: var(--text-color);">ABOUT US</h1>
+            <p class="text-lg md:text-xl font-light opacity-90">Washington University Television (WUTV) is the premier student-run broadcast network on campus. We give students the platform and tools to direct, edit, write, and star in their own productions.</p>
+        </div>
+
+        <h2 class="text-4xl font-bold mb-10 text-center border-b-2 border-white/10 pb-4 retro-text">Executive Board</h2>
+
+        <!-- Co-Presidents -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
+            <!-- Co-President 1 -->
+            <div class="surface-box rounded-xl p-6 flex flex-col items-center text-center interactive group">
+                <div class="w-32 h-32 rounded-full overflow-hidden mb-4 border-2 border-white/20 group-hover:border-white/60 transition-colors">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Co-President" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold mb-1">Jane Doe</h3>
+                <p class="text-sm font-semibold uppercase tracking-wider text-white/60 mb-3">Co-President &bull; Film & Media Studies '25</p>
+                <p class="text-sm text-gray-300">Insert description here. Jane loves producing Tiny Desk and organizing the 48hr Film-a-thon.</p>
+            </div>
+            
+            <!-- Co-President 2 -->
+            <div class="surface-box rounded-xl p-6 flex flex-col items-center text-center interactive group">
+                <div class="w-32 h-32 rounded-full overflow-hidden mb-4 border-2 border-white/20 group-hover:border-white/60 transition-colors">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Co-President" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-2xl font-bold mb-1">John Smith</h3>
+                <p class="text-sm font-semibold uppercase tracking-wider text-white/60 mb-3">Co-President &bull; Communication Design '24</p>
+                <p class="text-sm text-gray-300">Insert description here. John leads the creative direction and visual design team.</p>
+            </div>
+        </div>
+
+        <!-- Rest of Exec Board (Duplicate these blocks as needed) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <!-- Exec Member -->
+            <div class="surface-box rounded-xl p-6 flex flex-col items-center text-center interactive group">
+                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/20">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Exec" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-bold mb-1">Alex Johnson</h3>
+                <p class="text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Treasurer &bull; Finance '25</p>
+                <p class="text-xs text-gray-300">Insert description here.</p>
+            </div>
+            
+            <!-- Exec Member -->
+            <div class="surface-box rounded-xl p-6 flex flex-col items-center text-center interactive group">
+                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/20">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Exec" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-bold mb-1">Sarah Lee</h3>
+                <p class="text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Social Media Chair &bull; Marketing '26</p>
+                <p class="text-xs text-gray-300">Insert description here.</p>
+            </div>
+            
+            <!-- Exec Member -->
+            <div class="surface-box rounded-xl p-6 flex flex-col items-center text-center interactive group">
+                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/20">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Exec" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-bold mb-1">Mike Chang</h3>
+                <p class="text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">Head of Production &bull; FMS '24</p>
+                <p class="text-xs text-gray-300">Insert description here.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('wutv_theme');
+            if (savedTheme && savedTheme !== 'default') document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('.interactive, a').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+        });
+    </script>
+</body>
+</html>
