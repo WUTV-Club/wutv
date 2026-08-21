@@ -1,0 +1,57 @@
+# Apache configuration for WUTV.
+# Only used if the site is served by Apache (e.g. a wustl.edu host).
+# Netlify / Cloudflare Pages read `_headers` instead; GitHub Pages ignores both
+# and applies its own CDN caching.
+
+# --- Compression -----------------------------------------------------------
+# Text assets compress ~4-6x. This is the single biggest bandwidth saving
+# available for a static site under load.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/xml
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript application/x-javascript
+    AddOutputFilterByType BROTLI_COMPRESS application/json application/xml
+    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+# --- Cache lifetimes -------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # HTML: always revalidate so content updates are picked up immediately.
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # Versioned assets (?v=N) and images: cache for a year.
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|png|jpe?g|webp|svg|woff2?)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    <FilesMatch "\.html$">
+        Header set Cache-Control "public, max-age=0, must-revalidate"
+    </FilesMatch>
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# --- ETags -----------------------------------------------------------------
+# Disable Apache's inode-based ETags; they break validation behind multiple
+# servers and duplicate what Last-Modified already provides.
+FileETag None

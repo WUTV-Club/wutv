@@ -1,68 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WUTV - Shared Calendar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=VT323&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg-color: #0D1B2A; --surface-color: #1B263B; --accent-primary: #415A77; --accent-secondary: #778DA9; --text-color: #E0E1DD; --cursor-color: #E0E1DD; }
-        [data-theme="vintage"] { --bg-color: #2b2013; --surface-color: #3b2d1d; --text-color: #fcebd7; --cursor-color: #d19a5e; }
-        [data-theme="crt"] { --bg-color: #050505; --surface-color: #111111; --text-color: #39FF14; --cursor-color: #39FF14; }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; transition: background-color 0.8s ease, color 0.8s ease; cursor: none; }
-        .film-grain { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        [data-theme="crt"] .film-grain { opacity: 0.1; background-size: 100% 4px; background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); }
-        .custom-cursor { position: fixed; top: 0; left: 0; width: 30px; height: 30px; border: 2px solid var(--cursor-color); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-radius 0.2s, background-color 0.2s; z-index: 999999; mix-blend-mode: difference; }
-        .custom-cursor::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background-color: var(--cursor-color); border-radius: 50%; transform: translate(-50%, -50%); }
-        .hover-active .custom-cursor { width: 60px; height: 60px; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); }
-        .surface-box { background: rgba(27, 38, 59, 0.4); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    </style>
+    <title>WUTV - Production Calendar</title>
+
+    <meta name="description" content="The full WUTV production calendar — shoots, meetings, screenings and events for WashU's student-run television network.">
+    <link rel="canonical" href="https://joel-cpu-dev.github.io/wutv/calendar.html">
+    <meta name="theme-color" content="#0D1B2A">
+
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/logo-96.png">
+    <link rel="apple-touch-icon" href="assets/img/logo-256.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://calendar.google.com">
+
+    <link rel="stylesheet" href="assets/site.css?v=4">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&amp;family=VT323&amp;display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&amp;family=VT323&amp;display=swap"></noscript>
+
+    <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('wutv_theme');if(t&&t!=='default')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+
+    <script src="assets/site.js?v=3" defer></script>
 </head>
 <body class="antialiased h-screen flex flex-col">
 
-    <div class="film-grain"></div>
-    <div class="custom-cursor" id="cursor"></div>
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="custom-cursor" id="cursor" aria-hidden="true"></div>
 
     <!-- DIRECTOR'S VIEWFINDER OVERLAY -->
-    <div id="rec-overlay" class="fixed inset-0 pointer-events-none z-[9990] opacity-0 transition-opacity duration-500 hidden">
+    <div id="rec-overlay" class="fixed inset-0 pointer-events-none z-[9990] opacity-0 transition-opacity duration-500 hidden" aria-hidden="true">
         <div class="absolute inset-8 border border-white/20"></div>
         <div class="absolute inset-12 border-2 border-white/40"></div>
     </div>
 
     <!-- HEADER / BACK BUTTON -->
-    <div class="max-w-7xl w-full mx-auto px-8 pt-12 flex justify-between items-center mb-8 flex-shrink-0">
+    <div class="max-w-7xl w-full mx-auto px-6 md:px-8 pt-12 flex justify-between items-center mb-8 flex-shrink-0 gap-4">
         <a href="index.html" class="interactive flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            <span class="font-bold uppercase tracking-wider text-sm">Back to Home</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span class="font-bold uppercase tracking-wider text-xs md:text-sm">Back to Home</span>
         </a>
-        <h1 class="text-3xl font-bold font-['VT323'] uppercase tracking-widest text-white">Production Calendar</h1>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-widest text-white">Production Calendar</h1>
     </div>
 
     <!-- CALENDAR IFRAME -->
-    <section class="px-8 pb-12 max-w-7xl w-full mx-auto flex-grow flex flex-col">
-        <div class="surface-box rounded-2xl overflow-hidden p-2 flex-grow flex shadow-2xl border border-white/10">
-            <iframe src="https://calendar.google.com/calendar/embed?src=ddbd1becfd788a44828e9e0cd80d74e7157369dad4c80b54bc65a0a67163ea90%40group.calendar.google.com&ctz=America%2FChicago" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no" class="rounded-xl filter invert hue-rotate-180 opacity-90 w-full min-h-[600px] interactive"></iframe>
+    <section class="px-6 md:px-8 pb-12 max-w-7xl w-full mx-auto flex-grow flex flex-col">
+        <div class="surface-box rounded-2xl overflow-hidden p-2 flex-grow flex shadow-2xl">
+            <!-- Loaded on demand by assets/site.js so the third-party calendar
+                 bundle never blocks this page's first paint. -->
+            <iframe title="WUTV Production Calendar"
+                    data-src="https://calendar.google.com/calendar/embed?src=ddbd1becfd788a44828e9e0cd80d74e7157369dad4c80b54bc65a0a67163ea90%40group.calendar.google.com&amp;ctz=America%2FChicago"
+                    loading="lazy" width="100%" height="100%"
+                    class="rounded-xl filter invert hue-rotate-180 opacity-90 w-full h-full min-h-[600px] interactive"></iframe>
         </div>
+        <noscript>
+            <p class="text-center text-sm opacity-80 mt-4">
+                Enable JavaScript to view the embedded calendar, or
+                <a href="https://calendar.google.com/calendar/embed?src=ddbd1becfd788a44828e9e0cd80d74e7157369dad4c80b54bc65a0a67163ea90%40group.calendar.google.com&amp;ctz=America%2FChicago" class="underline">open it directly in Google Calendar</a>.
+            </p>
+        </noscript>
     </section>
 
-    <!-- SHARED JS LOGIC FOR PERSISTENCE -->
-    <script>
-        function setTheme(theme) { if (theme === 'default') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', theme); }
-        function toggleRecMode(isRec) {
-            const overlay = document.getElementById('rec-overlay');
-            if (isRec) { overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); } 
-            else { overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 500); }
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('wutv_theme') || 'default'; setTheme(savedTheme);
-            const savedRecMode = localStorage.getItem('wutv_recmode') === 'true'; toggleRecMode(savedRecMode);
-        });
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
-        document.querySelectorAll('.interactive, a, button, iframe').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active')); el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
-        });
-    </script>
 </body>
 </html>
