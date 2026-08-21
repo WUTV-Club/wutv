@@ -45,7 +45,7 @@
         isRecMode = (forceState === undefined || forceState === null) ? !isRecMode : !!forceState;
         if (forceState === undefined || forceState === null) writeStore(STORAGE_REC, String(isRecMode));
 
-        var indicator = document.getElementById('rec-indicator');
+        var indicators = document.querySelectorAll('.rec-indicator');
 
         if (isRecMode) {
             overlay.classList.remove('hidden');
@@ -53,17 +53,17 @@
             void overlay.offsetWidth;
             overlay.classList.remove('opacity-0');
             overlay.setAttribute('aria-hidden', 'false');
-            if (indicator) {
-                indicator.classList.remove('bg-gray-500');
-                indicator.classList.add('bg-red-500', GLOW);
-            }
+            indicators.forEach(function (dot) {
+                dot.classList.remove('bg-gray-500');
+                dot.classList.add('bg-red-500', GLOW);
+            });
         } else {
             overlay.classList.add('opacity-0');
             overlay.setAttribute('aria-hidden', 'true');
-            if (indicator) {
-                indicator.classList.remove('bg-red-500', GLOW);
-                indicator.classList.add('bg-gray-500');
-            }
+            indicators.forEach(function (dot) {
+                dot.classList.remove('bg-red-500', GLOW);
+                dot.classList.add('bg-gray-500');
+            });
             window.setTimeout(function () {
                 if (!isRecMode) overlay.classList.add('hidden');
             }, 500);
@@ -92,6 +92,57 @@
         }
     }
     window.handleCardKey = handleCardKey;
+
+    /* --- Collapsed navigation menu ----------------------------------------
+       Below 1024px the nav links live in a panel behind the toggle. CSS owns
+       the appearance; this only tracks open/closed state. */
+
+    function initNavMenu() {
+        var toggle = document.getElementById('nav-toggle');
+        var panel = document.getElementById('nav-panel');
+        if (!toggle || !panel) return;
+
+        function isOpen() {
+            return toggle.getAttribute('aria-expanded') === 'true';
+        }
+
+        function setOpen(open) {
+            panel.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        }
+
+        toggle.addEventListener('click', function () {
+            setOpen(!isOpen());
+        });
+
+        // Close on selection, so the panel is not left covering the section
+        // the link just jumped to.
+        panel.addEventListener('click', function (event) {
+            if (event.target.closest('a')) setOpen(false);
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!isOpen()) return;
+            if (toggle.contains(event.target) || panel.contains(event.target)) return;
+            setOpen(false);
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Escape' || !isOpen()) return;
+            setOpen(false);
+            toggle.focus();
+        });
+
+        // Growing past the breakpoint would otherwise leave a stale open panel
+        // behind the now-hidden toggle.
+        if (window.matchMedia) {
+            var wide = window.matchMedia('(min-width: 1024px)');
+            var onWide = function (event) { if (event.matches) setOpen(false); };
+            if (wide.addEventListener) wide.addEventListener('change', onWide);
+            else if (wide.addListener) wide.addListener(onWide);
+        }
+    }
 
     /* --- Custom cursor -----------------------------------------------------
        Skipped entirely on touch/coarse-pointer devices, so phones never
@@ -201,6 +252,7 @@
         // Restore the lens overlay without writing back to storage.
         if (readStore(STORAGE_REC) === 'true') toggleRecMode(true);
 
+        initNavMenu();
         initCursor();
         initReveal();
         initDeferredFrames();

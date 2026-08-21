@@ -252,7 +252,117 @@ h1, h2, h3, .retro-text {
     }
 }
 
-/* --- Buttons ------------------------------------------------------------- */
+/* --- Navigation: collapsed menu ------------------------------------------
+   Below 1024px the nav links and lens controls cannot fit beside the logo
+   and the Apply button, so they collapse into a panel behind the toggle.
+   `site.js` only flips `aria-expanded` and `.is-open`; everything visual,
+   including which toggle icon shows, is driven from here. */
+
+.nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    color: var(--text-color);
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible { background-color: rgba(255, 255, 255, 0.1); }
+
+.nav-toggle .nav-icon { width: 1.5rem; height: 1.5rem; }
+.nav-toggle .nav-icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-open { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icon-close { display: block; }
+
+.nav-panel {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    border-radius: 1.25rem;
+    /* Opaque rather than glass: the small-screen media query above strips
+       backdrop-filter, which would leave page content legible through it. */
+    background-color: var(--surface-color);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+
+.nav-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-panel-link {
+    display: block;
+    padding: 0.8125rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text-color);
+    transition: background-color 0.2s ease;
+}
+
+.nav-panel-link:hover,
+.nav-panel-link:focus-visible { background-color: rgba(255, 255, 255, 0.09); }
+
+.nav-panel-divider {
+    height: 1px;
+    margin: 0.5rem 0.25rem;
+    background-color: var(--glass-border);
+}
+
+.nav-panel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+/* 2.75rem keeps every control at a comfortable touch target. */
+.nav-panel-swatch,
+.nav-panel-lens {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.75rem;
+    border-radius: 9999px;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.nav-panel-swatch { width: 2.75rem; }
+.nav-panel-lens { gap: 0.5rem; padding: 0 1rem; }
+
+.nav-panel-swatch:hover,
+.nav-panel-swatch:focus-visible,
+.nav-panel-lens:hover,
+.nav-panel-lens:focus-visible { background-color: rgba(255, 255, 255, 0.1); }
+
+.nav-panel-lens-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-color);
+}
+
+/* --- Buttons -------------------------------------------------------------- */
 
 .btn-contrast {
     background: linear-gradient(135deg, #f8f9fa, #ced4da);
@@ -754,6 +864,10 @@ iframe:focus-visible {
 
 @media (min-width: 1024px) {
     .lg\:flex { display: flex; }
+
+    /* Collapsed menu is not needed once the links fit inline. */
+    .nav-toggle,
+    .nav-panel { display: none; }
     .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .exec-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

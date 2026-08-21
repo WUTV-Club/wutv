@@ -36,7 +36,7 @@
     <link rel="dns-prefetch" href="https://calendar.google.com">
 
     <!-- Site styles: one static, long-cacheable file (no runtime CSS compiler) -->
-    <link rel="stylesheet" href="assets/site.css?v=4">
+    <link rel="stylesheet" href="assets/site.css?v=5">
 
     <!-- Fonts load without blocking first paint; `display=swap` shows text immediately -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&amp;family=VT323&amp;display=swap" media="print" onload="this.media='all'">
@@ -45,7 +45,7 @@
     <!-- Apply the saved theme before first paint so there is no colour flash -->
     <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('wutv_theme');if(t&&t!=='default')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 
-    <script src="assets/site.js?v=3" defer></script>
+    <script src="assets/site.js?v=4" defer></script>
 </head>
 <body class="antialiased">
 
@@ -65,7 +65,10 @@
         </div>
     </div>
 
-    <!-- NAVIGATION BAR -->
+    <!-- NAVIGATION BAR
+         Below 1024px the links and lens controls do not fit beside the logo
+         and Apply button, so they move into #nav-panel behind the toggle.
+         At 1024px+ they sit inline and the toggle is hidden. -->
     <nav class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between gap-4 w-[95%] max-w-7xl px-3 py-2 md:px-6 md:py-3 rounded-full liquid-glass transition-all duration-500" aria-label="Main Navigation">
         <div class="flex items-center gap-2 md:gap-4">
             <a href="index.html" class="interactive group relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border border-white/20 shadow-lg bg-black flex-shrink-0" aria-label="WUTV Home Page">
@@ -82,7 +85,7 @@
         </div>
 
         <div class="flex items-center gap-2 md:gap-3 relative">
-            <div class="hidden md:flex items-center gap-1 bg-black/20 p-1 rounded-full border border-white/5 relative">
+            <div class="hidden lg:flex items-center gap-1 bg-black/20 p-1 rounded-full border border-white/5 relative">
                 <button type="button" onclick="setTheme('default')" aria-label="Set default theme" class="interactive group px-2.5 py-1.5 rounded-full hover:bg-white/10">
                     <span class="w-2 h-2 inline-block rounded-full bg-blue-400"></span>
                 </button>
@@ -96,12 +99,12 @@
                 <div class="w-px h-5 bg-white/20 mx-1"></div>
 
                 <button type="button" onclick="toggleRecMode()" aria-label="Toggle camera lens overlay" class="interactive group px-3 py-1.5 rounded-full hover:bg-white/10 flex items-center gap-2 relative">
-                    <span id="rec-indicator" class="w-2 h-2 rounded-full bg-gray-500"></span>
+                    <span class="rec-indicator w-2 h-2 rounded-full bg-gray-500"></span>
                     <span class="text-xs font-bold tracking-widest uppercase retro-text text-gray-300 mt-0.5">LENS</span>
                 </button>
 
                 <!-- Animated Lens Callout Arrow -->
-                <div class="absolute -bottom-16 right-4 hidden md:flex flex-col items-center animate-bounce text-white/50 pointer-events-none" aria-hidden="true">
+                <div class="absolute -bottom-16 right-4 hidden lg:flex flex-col items-center animate-bounce text-white/50 pointer-events-none" aria-hidden="true">
                     <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
                     </svg>
@@ -110,6 +113,45 @@
             </div>
 
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQUVx0UCqJigeO_lTWXGYN1PYqugCRmQgx-SiOJeF30XFW9A/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn-contrast px-4 py-2 md:px-5 md:py-2 rounded-full font-bold uppercase tracking-wider text-xs md:text-sm interactive whitespace-nowrap">Apply</a>
+
+            <button type="button" id="nav-toggle" class="nav-toggle interactive" aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+                <svg class="nav-icon nav-icon-open" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg class="nav-icon nav-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Collapsed menu (narrow screens only) -->
+        <div class="nav-panel" id="nav-panel">
+            <a href="#our-work" class="nav-panel-link interactive">Work</a>
+            <a href="#upcoming-events" class="nav-panel-link interactive">Upcoming Events</a>
+            <a href="#connect" class="nav-panel-link interactive">Contact</a>
+            <a href="calendar.html" class="nav-panel-link interactive">Calendar</a>
+            <a href="about.html" class="nav-panel-link interactive">About Us</a>
+
+            <div class="nav-panel-divider" aria-hidden="true"></div>
+
+            <div class="nav-panel-controls">
+                <button type="button" onclick="setTheme('default')" aria-label="Set default theme" class="nav-panel-swatch interactive">
+                    <span class="w-3 h-3 rounded-full bg-blue-400"></span>
+                </button>
+                <button type="button" onclick="setTheme('vintage')" aria-label="Set vintage theme" class="nav-panel-swatch interactive">
+                    <span class="w-3 h-3 rounded-full bg-orange-400"></span>
+                </button>
+                <button type="button" onclick="setTheme('crt')" aria-label="Set CRT theme" class="nav-panel-swatch interactive">
+                    <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                </button>
+
+                <div class="w-px h-5 bg-white/20 mx-1" aria-hidden="true"></div>
+
+                <button type="button" onclick="toggleRecMode()" aria-label="Toggle camera lens overlay" class="nav-panel-lens interactive">
+                    <span class="rec-indicator w-3 h-3 rounded-full bg-gray-500"></span>
+                    <span class="nav-panel-lens-label retro-text">LENS</span>
+                </button>
+            </div>
         </div>
     </nav>
 
